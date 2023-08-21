@@ -7,7 +7,7 @@ import (
 
 const (
 	singleton = iota
-	factory
+	provider
 )
 
 type serviceProvider struct {
@@ -18,10 +18,13 @@ type serviceProvider struct {
 
 var spMap map[string]*serviceProvider = make(map[string]*serviceProvider)
 
-func RegisterSingleton[P any](service P) {
+func getKey[P any]() string {
 	t := reflect.TypeOf((*P)(nil)).Elem()
-	key := t.PkgPath() + "." + t.Name()
+	return t.PkgPath() + "." + t.Name()
+}
 
+func RegisterSingleton[P any](service P) {
+	key := getKey[P]()
 	sp := &serviceProvider{
 		spType:    singleton,
 		singleton: service,
@@ -31,23 +34,20 @@ func RegisterSingleton[P any](service P) {
 }
 
 func RegisterProvider[P any](provide func() (P, error)) {
-	t := reflect.TypeOf((*P)(nil)).Elem()
-	key := t.PkgPath() + "." + t.Name()
-
+	key := getKey[P]()
 	sp := &serviceProvider{
-		spType:  singleton,
+		spType:  provider,
 		provide: provide,
 	}
 	spMap[key] = sp
 }
 
 func GetService[P any]() (P, error) {
+	key := getKey[P]()
 	var zero P
-	t := reflect.TypeOf((*P)(nil)).Elem()
-	key := t.PkgPath() + "." + t.Name()
 	sp, ok := spMap[key]
 	if !ok {
-		return zero, fmt.Errorf("No provider found for type '%s'", t.Name())
+		return zero, fmt.Errorf("No provider found for type '%s'", key)
 	}
 
 	if sp.spType == singleton {
