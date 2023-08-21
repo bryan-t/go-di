@@ -17,7 +17,7 @@ import (
 
 func main() {
     var buf bytes.Buffer
-    godi.RegisterSingleton[io.Writer](buf)
+    godi.RegisterSingleton[io.Writer](&buf)
 }
 
 ```
@@ -36,7 +36,7 @@ import (
 func main() {
     godi.RegisterProvider[io.Writer](func()(io.Writer, error){
         var buf bytes.Buffer
-        return buf, nil
+        return &buf, nil
     })
 }
 
@@ -54,7 +54,7 @@ import (
 
 func main() {
     var buf bytes.Buffer
-    godi.RegisterSingleton[io.Writer](buf)
+    godi.RegisterSingleton[io.Writer](&buf)
     writer, _ := godi.GetService[io.Writer]()
 }
 
