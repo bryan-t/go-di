@@ -1,4 +1,4 @@
-module github.com/bryan-t/go-di.git
+module github.com/bryan-t/go-di
 
 go 1.20
 
