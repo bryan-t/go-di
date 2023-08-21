@@ -53,6 +53,7 @@ func GetService[P any]() (P, error) {
 	if sp.spType == singleton {
 		return sp.singleton.(P), nil
 	}
+
 	provide := sp.provide.(func() (P, error))
 	return provide()
 }
