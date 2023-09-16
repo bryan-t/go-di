@@ -1,5 +1,5 @@
 
-# go-di
+# godi
 
 Simple dependency injection for Go.
 
@@ -11,7 +11,7 @@ Simple dependency injection for Go.
 package main
 
 import (
-    godi "github.com/bryan-t/go-di"
+    godi "github.com/bryan-t/godi"
     "io"
 )
 
@@ -29,7 +29,7 @@ Register a function that creates the service.
 package main
 
 import (
-    godi "github.com/bryan-t/go-di"
+    godi "github.com/bryan-t/godi"
     "io"
 )
 
@@ -48,7 +48,7 @@ func main() {
 package main
 
 import (
-    godi "github.com/bryan-t/go-di"
+    godi "github.com/bryan-t/godi"
     "io"
 )
 

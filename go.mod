@@ -1,4 +1,4 @@
-module github.com/bryan-t/go-di
+module github.com/bryan-t/godi
 
 go 1.20
 

@@ -16,7 +16,7 @@ func (t *testProvider) test() {}
 func TestRegisterSingleton(t *testing.T) {
 	impl := &testProvider{}
 	RegisterSingleton[tester](impl)
-	assert.Equal(t, impl, spMap["github.com/bryan-t/go-di.git.tester"].singleton, "Interface not found")
+	assert.Equal(t, impl, spMap["github.com/bryan-t/godi.git.tester"].singleton, "Interface not found")
 
 	x := 5
 	RegisterSingleton[int](x)
@@ -27,7 +27,7 @@ func TestRegisterProvider(t *testing.T) {
 	impl := &testProvider{}
 	RegisterProvider[tester](func() (tester, error) { return impl, nil })
 
-	registeredImpl, _ := spMap["github.com/bryan-t/go-di.git.tester"].provide.(func() (tester, error))()
+	registeredImpl, _ := spMap["github.com/bryan-t/godi.git.tester"].provide.(func() (tester, error))()
 	assert.Equal(t, impl, registeredImpl, "Got a different impl from provide")
 }
 
@@ -50,4 +50,20 @@ func TestGetService(t *testing.T) {
 	RegisterProvider[tester](func() (tester, error) { return impl, nil })
 	registeredImpl, _ = GetService[tester]()
 	assert.Equal(t, impl, registeredImpl, "registeredImpl not the same using provide.")
+}
+
+func TestLoad(t *testing.T) {
+	// create config
+	//
+	config := Config{
+		Singletons: []Singleton{
+			Singleton{
+				InterfacePkg: "github.com/bryan-t/godi",
+				Interface:    "tester",
+			},
+		},
+	}
+
+	err := Load(config)
+	assert.Nil(t, err)
 }
