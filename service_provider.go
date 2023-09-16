@@ -2,7 +2,6 @@ package godi
 
 import (
 	"fmt"
-	"go/importer"
 	"reflect"
 )
 
@@ -22,24 +21,6 @@ var spMap map[string]*serviceProvider = make(map[string]*serviceProvider)
 func getKey[P any]() string {
 	t := reflect.TypeOf((*P)(nil)).Elem()
 	return t.PkgPath() + "." + t.Name()
-}
-
-func Load(config Config) error {
-
-	for _, v := range config.Singletons {
-		interfacePkg, err := importer.Default().Import(v.InterfacePkg)
-		if err != nil {
-			return err
-		}
-		interfacePkgScope := interfacePkg.Scope()
-		interfaceObject := interfacePkgScope.Lookup(v.Interface)
-		if interfaceObject == nil {
-			return fmt.Errorf("Did not find interface '%s'", v.Interface)
-		}
-		fmt.Printf("Got interface %+v \n", interfaceObject)
-
-	}
-	return nil
 }
 
 func RegisterSingleton[P any](service P) {
